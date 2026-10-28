@@ -8,6 +8,7 @@ namespace LibraryManager.Services
         bool RemoveBook(string id);
         IEnumerable<Book> SearchByAuthor(string author);
         IEnumerable<Book> SearchByTitle(string title);
+        IEnumerable<Book> GetAllBooks();
         bool BorrowBook(string id);
         bool ReturnBook(string id);
     }
