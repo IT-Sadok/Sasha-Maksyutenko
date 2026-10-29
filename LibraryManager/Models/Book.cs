@@ -11,6 +11,6 @@ namespace LibraryManager.Models
         public string? Author { get; set; }
         public int Year { get; set; }
         public bool IsAvailable { get; set; } = true;
-        public string Status => IsAvailable ? "Free" : "Available";
+        public string Status => IsAvailable ? "Free" : "Borrowed";
     }
 }

@@ -23,6 +23,7 @@ namespace LibraryManager.Repositories
 
         public void Save(IEnumerable<Book> books)
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
             var json = JsonSerializer.Serialize(books);
             File.WriteAllText(_filePath, json);
         }

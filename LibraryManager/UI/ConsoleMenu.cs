@@ -63,7 +63,7 @@ namespace LibraryManager.UI
 
         private void ListAllBooks()
         {
-            _bookService.GetAllBooks().ToList().ForEach(book =>
+            _bookService.GetAllBooks().Where(b=>b.IsAvailable).ToList().ForEach(book =>
             {
                 Console.WriteLine($"ID: {book.Id}, Title: {book.Title}, Author: {book.Author}, Status: {book.Status}");
             });
