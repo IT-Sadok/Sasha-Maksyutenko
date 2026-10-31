@@ -1,4 +1,5 @@
 ﻿using HospitalSystem.Models;
+using HospitalSystem.UI;
 var hospitals = new List<Hospital>
 {
     new Hospital
@@ -57,3 +58,5 @@ var hospitals = new List<Hospital>
         }
     }
 };
+var menu = new Menu(hospitals);
+menu.Run();
