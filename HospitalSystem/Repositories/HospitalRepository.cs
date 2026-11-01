@@ -9,6 +9,12 @@ namespace HospitalSystem.Repositories
         {
             _hospitals = hospitals;
         }
+
+        public void Add(Hospital hospital)
+        {
+            _hospitals.Add(hospital);
+        }
+
         public IEnumerable<Hospital> GetAll()
         {
             return _hospitals;

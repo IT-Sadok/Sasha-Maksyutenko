@@ -6,5 +6,6 @@ namespace HospitalSystem.Repositories
     {
         IEnumerable<Hospital> GetAll();
         Hospital GetById(int id);
+        void Add(Hospital hospital);
     }
 }
