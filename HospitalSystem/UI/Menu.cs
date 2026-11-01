@@ -20,14 +20,17 @@ namespace HospitalSystem.UI
 
         public void PrintMenu()
         {
-            Console.WriteLine("Hospital Management System");
+            Console.WriteLine("\n=== Hospital Management System ===");
+            Console.WriteLine("----------------------------------");
             Console.WriteLine("1. View all hospitals");
             Console.WriteLine("2. Select hospital by ID");
             Console.WriteLine("3. Add a doctor to a hospital");
             Console.WriteLine("4. Remove a doctor from a hospital");
             Console.WriteLine("5. Update a doctor's information");
             Console.WriteLine("6. Save changes");
+            Console.WriteLine("7. Add hospital");
             Console.WriteLine("0. Exit");
+            Console.WriteLine("----------------------------------");
         }
         public void Run()
         {
@@ -56,6 +59,9 @@ namespace HospitalSystem.UI
                     case "6":
                         SaveChanges();
                         break;
+                    case "7":
+                        AddHospital();
+                        break;
                     case "0":
                         return;
                     default:
@@ -63,6 +69,18 @@ namespace HospitalSystem.UI
                         break;
                 }
             }
+        }
+
+        private void AddHospital()
+        {
+            Console.Write("Enter hospital ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int id)) return;
+
+            Console.Write("Enter hospital name: ");
+            var name = Console.ReadLine();
+
+            _repository.Add(new Hospital { Id = id, Name = name });
+            Console.WriteLine($"Hospital '{name}' added successfully.");
         }
 
         private void SaveChanges()
@@ -89,6 +107,7 @@ namespace HospitalSystem.UI
             Console.Write("Enter new doctor specialty (leave empty to keep current): ");
             var specialty = Console.ReadLine();
             _doctorService.UpdateDoctor(hospitalId, new Doctor { Id = doctorId, Name = name, Specialty = specialty });
+            Console.WriteLine($"Doctor with ID {doctorId} updated successfully.");
         }
 
         private void RemoveDoctorFromHospital()
@@ -98,6 +117,7 @@ namespace HospitalSystem.UI
             Console.WriteLine("Enter doctor ID to remove: ");
             if (!int.TryParse(Console.ReadLine(), out int doctorId)) return;
             _doctorService.RemoveDoctor(hospitalId, doctorId);
+            Console.WriteLine($"Doctor with ID {doctorId} removed successfully.");
         }
 
         private void AddDoctorToHospital()
@@ -115,12 +135,19 @@ namespace HospitalSystem.UI
             var specialty = Console.ReadLine();
 
             _doctorService.AddDoctor(hospitalId, new Doctor { Id = doctorId, Name = name, Specialty = specialty });
+            Console.WriteLine($"Doctor '{name}' added successfully.");
         }
 
         private void ViewAllHospitals()
         {
+            var hospitals = _repository.GetAll().ToList();
             Console.WriteLine("List of Hospitals:");
-            foreach (var hospital in _repository.GetAll())
+            if (!hospitals.Any())
+            {
+                Console.WriteLine("No hospitals found.");
+                return;
+            }
+            foreach (var hospital in hospitals)
             {
                 Console.WriteLine($"ID: {hospital.Id}, Name: {hospital.Name}");
             }
@@ -128,26 +155,26 @@ namespace HospitalSystem.UI
         private void SelectHospitalById()
         {
             Console.Write("Enter hospital ID: ");
-            if (int.TryParse(Console.ReadLine(), out int hospitalId))
+            if (!int.TryParse(Console.ReadLine(), out int hospitalId)) return;
+
+            var hospital = _repository.GetById(hospitalId);
+            if (hospital == null)
             {
-                var hospital = _repository.GetById(hospitalId);
-                if (hospital != null)
-                {
-                    Console.WriteLine($"Hospital Name: {hospital.Name}");
-                    Console.WriteLine("Doctors:");
-                    foreach (var doctor in hospital.Doctors)
-                    {
-                        Console.WriteLine($"ID: {doctor.Id}, Name: {doctor.Name}, Specialty: {doctor.Specialty}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Hospital not found.");
-                }
+                Console.WriteLine("Hospital not found.");
+                return;
             }
-            else
+
+            if (!hospital.Doctors.Any())
             {
-                Console.WriteLine("Invalid ID. Please enter a valid number.");
+                Console.WriteLine("No doctors found.");
+                return;
+            }
+
+            Console.WriteLine($"Hospital Name: {hospital.Name}");
+            Console.WriteLine("Doctors:");
+            foreach (var doctor in hospital.Doctors)
+            {
+                Console.WriteLine($"ID: {doctor.Id}, Name: {doctor.Name}, Specialty: {doctor.Specialty}");
             }
         }
     }
