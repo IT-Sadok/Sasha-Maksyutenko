@@ -1,7 +1,10 @@
 ﻿using HospitalSystem.Repositories;
 using HospitalSystem.Services;
+using HospitalSystem.Simulation;
 using HospitalSystem.UI;
 var repository = new JsonHospitalRepository("hospitals.json");
 var doctorService = new DoctorService(repository);
 var menu = new Menu(repository, doctorService, repository);
+var demo = new RaceConditionDemo();
+demo.RunDemo();
 menu.Run();
