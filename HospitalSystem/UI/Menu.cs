@@ -10,15 +10,12 @@ namespace HospitalSystem.UI
     {
         private readonly IHospitalRepository _repository;
         private readonly IDoctorService _doctorService;
-        public Menu(IHospitalRepository repository, IDoctorService doctorService)
+        private readonly IPersistable? _persistable;
+        public Menu(IHospitalRepository repository, IDoctorService doctorService, IPersistable? persistable = null)
         {
             _repository = repository;
             _doctorService = doctorService;
-        }
-
-        public Menu(IDoctorService doctorService)
-        {
-            _doctorService = doctorService;
+            _persistable = persistable;
         }
 
         public void PrintMenu()
@@ -29,6 +26,7 @@ namespace HospitalSystem.UI
             Console.WriteLine("3. Add a doctor to a hospital");
             Console.WriteLine("4. Remove a doctor from a hospital");
             Console.WriteLine("5. Update a doctor's information");
+            Console.WriteLine("6. Save changes");
             Console.WriteLine("0. Exit");
         }
         public void Run()
@@ -55,12 +53,28 @@ namespace HospitalSystem.UI
                     case "5":
                         UpdateDoctorInformation();
                         break;
+                    case "6":
+                        SaveChanges();
+                        break;
                     case "0":
                         return;
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;
                 }
+            }
+        }
+
+        private void SaveChanges()
+        {
+            if(_persistable != null)
+            {
+                _persistable.Save();
+                Console.WriteLine("Changes saved successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Save operation is not supported.");
             }
         }
 
