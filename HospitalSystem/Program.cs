@@ -7,4 +7,5 @@ var doctorService = new DoctorService(repository);
 var menu = new Menu(repository, doctorService, repository);
 var demo = new RaceConditionDemo();
 demo.RunDemo();
+demo.RunDemoWithLock();
 menu.Run();
