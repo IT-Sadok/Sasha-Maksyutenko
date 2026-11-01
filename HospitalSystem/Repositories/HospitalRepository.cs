@@ -5,9 +5,9 @@ namespace HospitalSystem.Repositories
     public class HospitalRepository : IHospitalRepository
     {
         private readonly List<Hospital> _hospitals;
-        public HospitalRepository()
+        public HospitalRepository(List<Hospital> hospitals)
         {
-            _hospitals = new List<Hospital>();
+            _hospitals = hospitals;
         }
         public IEnumerable<Hospital> GetAll()
         {

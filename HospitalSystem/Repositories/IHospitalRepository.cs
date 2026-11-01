@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using HospitalSystem.Models;
 
 namespace HospitalSystem.Repositories
 {
-    internal interface IHospitalRepository
+    public interface IHospitalRepository
     {
+        IEnumerable<Hospital> GetAll();
+        Hospital GetById(int id);
     }
 }

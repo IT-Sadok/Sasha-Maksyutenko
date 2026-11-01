@@ -1,8 +1,5 @@
 ﻿using HospitalSystem.Models;
 using HospitalSystem.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HospitalSystem.Services
 {
@@ -43,8 +40,11 @@ namespace HospitalSystem.Services
                 var existingDoctor = hospital.Doctors.FirstOrDefault(d => d.Id == doctor.Id);
                 if (existingDoctor != null)
                 {
-                    existingDoctor.Name = doctor.Name;
-                    existingDoctor.Specialty = doctor.Specialty;
+                    if (!string.IsNullOrEmpty(doctor.Name))
+                        existingDoctor.Name = doctor.Name;
+
+                    if (!string.IsNullOrEmpty(doctor.Specialty))
+                        existingDoctor.Specialty = doctor.Specialty;
                 }
             }
         }
