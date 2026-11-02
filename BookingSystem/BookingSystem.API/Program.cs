@@ -1,6 +1,8 @@
 using BookingSystem.Application.Interfaces;
+using BookingSystem.Application.Validators;
 using BookingSystem.Infrastructure.Data;
 using BookingSystem.Infrastructure.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,7 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters.IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!));
 });
 builder.Services.AddSwaggerGen();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 
 var app = builder.Build();
 
