@@ -34,6 +34,7 @@ namespace BookingSystem.Infrastructure.Services
         {
             var user = new ApplicationUser
             {
+                Name = registerDTO.Name,
                 UserName = registerDTO.Name,
                 Email = registerDTO.Email,
                 Role = registerDTO.Role
