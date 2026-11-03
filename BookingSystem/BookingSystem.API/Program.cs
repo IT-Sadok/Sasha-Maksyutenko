@@ -1,6 +1,7 @@
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Application.Validators;
 using BookingSystem.Infrastructure.Data;
+using BookingSystem.Infrastructure.Repositories;
 using BookingSystem.Infrastructure.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,7 +29,10 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
-
+builder.Services.AddScoped<IApartmentService, ApartmentService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

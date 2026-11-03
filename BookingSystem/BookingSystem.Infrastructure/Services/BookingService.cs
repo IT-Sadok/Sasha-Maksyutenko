@@ -15,7 +15,7 @@ namespace BookingSystem.Infrastructure.Services
             _bookingRepository = bookingRepository;
             _apartmentRepository = apartmentRepository;
         }
-        public async Task<BookingDTO> CreateBookingAsync(CreateBookingDTO bookingDto)
+        public async Task<BookingDTO> CreateBookingAsync(CreateBookingDTO bookingDto, string userId)
         {
             var isAvailable = await _bookingRepository.IsBookingAvailable(
                 bookingDto.ApartmentId,
@@ -31,7 +31,7 @@ namespace BookingSystem.Infrastructure.Services
             var totalPrice = (bookingDto.EndDate - bookingDto.StartDate).Days * apartment.Price;
             var booking = await _bookingRepository.CreateBooking(new Booking
             {
-                UserId = bookingDto.UserId,
+                UserId = userId,
                 ApartmentId = bookingDto.ApartmentId,
                 StartDate = bookingDto.StartDate,
                 EndDate = bookingDto.EndDate,
