@@ -1,5 +1,4 @@
 ﻿
-
 using BookingSystem.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
