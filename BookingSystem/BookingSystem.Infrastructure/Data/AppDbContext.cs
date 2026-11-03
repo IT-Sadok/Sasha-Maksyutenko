@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using BookingSystem.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Infrastructure.Data
@@ -10,5 +11,7 @@ namespace BookingSystem.Infrastructure.Data
         {
 
         }
+        public DbSet<Apartment> Apartments { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
     }
 }
