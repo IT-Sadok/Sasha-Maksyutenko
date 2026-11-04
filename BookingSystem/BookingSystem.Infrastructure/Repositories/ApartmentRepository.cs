@@ -14,6 +14,14 @@ namespace BookingSystem.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<Apartment> AddApartment(Apartment apartment)
+        {
+            apartment.Id = Guid.NewGuid();
+            _context.Apartments.Add(apartment);
+            await _context.SaveChangesAsync();
+            return apartment;
+        }
+
         public async Task<IEnumerable<Apartment>> GetAll()
         {
             return await _context.Apartments.ToListAsync();

@@ -7,5 +7,6 @@ namespace BookingSystem.Application.Interfaces
         Task<Apartment> GetApartmentById(Guid apartmentId);
         Task<IEnumerable<Apartment>> GetAll();
         Task<IEnumerable<Apartment>> GetAvailableApartments(DateTime startDate, DateTime endDate);
+        Task<Apartment> AddApartment(Apartment apartment);
     }
 }
