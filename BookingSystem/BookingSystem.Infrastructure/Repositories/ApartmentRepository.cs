@@ -27,7 +27,7 @@ namespace BookingSystem.Infrastructure.Repositories
             return await _context.Apartments.ToListAsync();
         }
 
-        public async Task<Apartment> GetApartmentById(Guid apartmentId)
+        public async Task<Apartment?> GetApartmentById(Guid apartmentId)
         {
             return await _context.Apartments.FindAsync(apartmentId);
         }

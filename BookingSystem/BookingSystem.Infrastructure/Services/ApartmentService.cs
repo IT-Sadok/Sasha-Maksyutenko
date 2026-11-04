@@ -33,9 +33,10 @@ namespace BookingSystem.Infrastructure.Services
             };
         }
 
-        public async Task<ApartmentDto> GetApartmentByIdAsync(Guid apartmentId)
+        public async Task<ApartmentDto?> GetApartmentByIdAsync(Guid apartmentId)
         {
             var apartment = await _apartmentRepository.GetApartmentById(apartmentId);
+            if (apartment == null) return null;
             return new ApartmentDto
             {
                 Id = apartment.Id,
