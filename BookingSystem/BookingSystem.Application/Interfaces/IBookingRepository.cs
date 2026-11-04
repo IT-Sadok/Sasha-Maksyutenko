@@ -1,5 +1,4 @@
 ﻿
-
 using BookingSystem.Domain.Entities;
 
 namespace BookingSystem.Application.Interfaces
