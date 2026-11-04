@@ -10,7 +10,8 @@ namespace BookingSystem.Infrastructure.Services
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IApartmentRepository _apartmentRepository;
-        public BookingService(IBookingRepository bookingRepository, IApartmentRepository apartmentRepository)
+        public BookingService(IBookingRepository bookingRepository,
+                              IApartmentRepository apartmentRepository)
         {
             _bookingRepository = bookingRepository;
             _apartmentRepository = apartmentRepository;
@@ -35,7 +36,7 @@ namespace BookingSystem.Infrastructure.Services
                 ApartmentId = bookingDto.ApartmentId,
                 StartDate = bookingDto.StartDate,
                 EndDate = bookingDto.EndDate,
-                TotalPrice = totalPrice
+                TotalPrice = totalPrice,
             });
 
             return new BookingDTO
@@ -45,7 +46,8 @@ namespace BookingSystem.Infrastructure.Services
                 ApartmentId = booking.ApartmentId,
                 StartDate = booking.StartDate,
                 EndDate = booking.EndDate,
-                TotalPrice = booking.TotalPrice
+                TotalPrice = booking.TotalPrice,
+                ApartmentName = apartment.Name
             };
         }
 
@@ -59,7 +61,8 @@ namespace BookingSystem.Infrastructure.Services
                 ApartmentId = booking.ApartmentId,
                 StartDate = booking.StartDate,
                 EndDate = booking.EndDate,
-                TotalPrice = booking.TotalPrice
+                TotalPrice = booking.TotalPrice,
+                ApartmentName = booking.Apartment.Name
             });
         }
 

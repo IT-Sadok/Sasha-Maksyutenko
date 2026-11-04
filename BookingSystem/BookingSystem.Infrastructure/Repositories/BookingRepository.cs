@@ -10,10 +10,7 @@ namespace BookingSystem.Infrastructure.Repositories
     public class BookingRepository : IBookingRepository
     {
         private readonly AppDbContext _context;
-        public BookingRepository(AppDbContext context)
-        {
-            _context = context;
-        }
+        public BookingRepository(AppDbContext context) => _context = context;
         public async Task<Booking> CreateBooking(Booking booking)
         {
             booking.Id = Guid.NewGuid();
@@ -25,6 +22,7 @@ namespace BookingSystem.Infrastructure.Repositories
         public async Task<IEnumerable<Booking>> GetBookingsByUserId(string userId)
         {
             return await _context.Bookings
+                .Include(b => b.Apartment)
                 .Where(b => b.UserId == userId)
                 .ToListAsync();
         }
