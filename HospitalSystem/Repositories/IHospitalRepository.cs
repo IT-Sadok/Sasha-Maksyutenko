@@ -1,0 +1,10 @@
+﻿using HospitalSystem.Models;
+
+namespace HospitalSystem.Repositories
+{
+    public interface IHospitalRepository
+    {
+        IEnumerable<Hospital> GetAll();
+        Hospital GetById(int id);
+    }
+}

@@ -1,4 +1,6 @@
 ﻿using HospitalSystem.Models;
+using HospitalSystem.Repositories;
+using HospitalSystem.Services;
 using HospitalSystem.UI;
 var hospitals = new List<Hospital>
 {
@@ -58,5 +60,7 @@ var hospitals = new List<Hospital>
         }
     }
 };
-var menu = new Menu(hospitals);
+var repository = new HospitalRepository(hospitals);
+var doctorService = new DoctorService(repository);
+var menu = new Menu(repository, doctorService);
 menu.Run();
