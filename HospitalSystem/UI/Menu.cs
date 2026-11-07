@@ -104,41 +104,50 @@ namespace HospitalSystem.UI
             Console.WriteLine("Changes saved successfully.");
         }
 
-        private void UpdateDoctorInformation()
+        private bool UpdateDoctorInformation()
         {
             Console.Write("Enter hospital ID: ");
-            if (!int.TryParse(Console.ReadLine(), out int hospitalId)) return;
+            if (!int.TryParse(Console.ReadLine(), out int hospitalId)) return false;
             Console.Write("Enter doctor ID to update: ");
-            if (!int.TryParse(Console.ReadLine(), out int doctorId)) return;
+            if (!int.TryParse(Console.ReadLine(), out int doctorId)) return false;
             Console.Write("Enter new doctor name (leave empty to keep current): ");
             var name = Console.ReadLine();
             Console.Write("Enter new doctor specialty (leave empty to keep current): ");
             var specialty = Console.ReadLine();
-            _doctorService.UpdateDoctor(hospitalId, new Doctor { Id = doctorId, Name = name, Specialty = specialty });
-            Console.WriteLine($"Doctor with ID {doctorId} updated successfully.");
+            if (_doctorService.UpdateDoctor(hospitalId, new Doctor { Id = doctorId, Name = name, Specialty = specialty }))
+                Console.WriteLine($"Doctor with ID {doctorId} updated successfully.");
+            else
+                Console.WriteLine("Doctor or hospital not found.");
+            return true;
         }
 
-        private void RemoveDoctorFromHospital()
+        private bool RemoveDoctorFromHospital()
         {
             Console.WriteLine("Enter hospital ID: ");
-            if (!int.TryParse(Console.ReadLine(), out int hospitalId)) return;
+            if (!int.TryParse(Console.ReadLine(), out int hospitalId)) return false;
             Console.WriteLine("Enter doctor ID to remove: ");
-            if (!int.TryParse(Console.ReadLine(), out int doctorId)) return;
-            _doctorService.RemoveDoctor(hospitalId, doctorId);
-            Console.WriteLine($"Doctor with ID {doctorId} removed successfully.");
+            if (!int.TryParse(Console.ReadLine(), out int doctorId)) return false;
+            if (_doctorService.RemoveDoctor(hospitalId, doctorId))
+                Console.WriteLine($"Doctor with ID {doctorId} removed successfully.");
+            else
+                Console.WriteLine("Doctor or hospital not found.");
+            return true;
         }
 
-        private void AddDoctorToHospital()
+        private bool AddDoctorToHospital()
         {
             Console.Write("Enter hospital ID: ");
-            if (!int.TryParse(Console.ReadLine(), out int hospitalId)) return;
+            if (!int.TryParse(Console.ReadLine(), out int hospitalId)) return false;
             Console.Write("Enter doctor name: ");
             var name = Console.ReadLine();
             Console.Write("Enter doctor specialty: ");
             var specialty = Console.ReadLine();
 
-            _doctorService.AddDoctor(hospitalId, new Doctor {Name = name, Specialty = specialty });
-            Console.WriteLine($"Doctor '{name}' added successfully.");
+            if (_doctorService.AddDoctor(hospitalId, new Doctor { Name = name, Specialty = specialty }))
+                Console.WriteLine($"Doctor '{name}' added successfully.");
+            else
+                Console.WriteLine("Hospital not found.");
+            return true;
         }
 
         private void ViewAllHospitals()
