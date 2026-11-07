@@ -3,6 +3,7 @@
 using HospitalSystem.Models;
 using HospitalSystem.Repositories;
 using HospitalSystem.Services;
+using HospitalSystem.Simulation;
 
 namespace HospitalSystem.UI
 {
@@ -11,11 +12,13 @@ namespace HospitalSystem.UI
         private readonly IHospitalRepository _repository;
         private readonly IDoctorService _doctorService;
         private readonly IPersistable? _persistable;
-        public Menu(IHospitalRepository repository, IDoctorService doctorService, IPersistable? persistable = null)
+        private readonly RaceConditionDemo? _demo;
+        public Menu(IHospitalRepository repository, RaceConditionDemo demo, IDoctorService doctorService, IPersistable? persistable = null)
         {
             _repository = repository;
             _doctorService = doctorService;
             _persistable = persistable;
+            _demo = demo;
         }
 
         public void PrintMenu()
@@ -29,6 +32,7 @@ namespace HospitalSystem.UI
             Console.WriteLine("5. Update a doctor's information");
             Console.WriteLine("6. Save changes");
             Console.WriteLine("7. Add hospital");
+            Console.WriteLine("8. Run race condition demo");
             Console.WriteLine("0. Exit");
             Console.WriteLine("----------------------------------");
         }
@@ -62,6 +66,9 @@ namespace HospitalSystem.UI
                     case "7":
                         AddHospital();
                         break;
+                    case "8":
+                        StartDemo();
+                        break;
                     case "0":
                         return;
                     default:
@@ -71,6 +78,18 @@ namespace HospitalSystem.UI
             }
         }
 
+        private void StartDemo()
+        {
+            if (_demo != null)
+            {
+                _demo.RunDemo();
+                _demo.RunDemoWithLock();
+            }
+            else
+            {
+                Console.WriteLine("Race condition demo is not available.");
+            }
+        }
         private void AddHospital()
         {
             Console.Write("Enter hospital ID: ");
