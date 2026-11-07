@@ -15,6 +15,7 @@ namespace HospitalSystem.Services
             var hospital = _hospitalRepository.GetById(hospitalId);
             if (hospital != null)
             {
+                doctor.Id = hospital.Doctors.Count > 0 ? hospital.Doctors.Max(d => d.Id) + 1 : 1;
                 hospital.Doctors.Add(doctor);
             }
         }

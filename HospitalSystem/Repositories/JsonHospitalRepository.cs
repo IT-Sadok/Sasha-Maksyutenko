@@ -24,6 +24,7 @@ namespace HospitalSystem.Repositories
 
         public void Add(Hospital hospital)
         {
+            hospital.Id = _hospitals.Count > 0 ? _hospitals.Max(h => h.Id) + 1 : 1;
             _hospitals.Add(hospital);
         }
 

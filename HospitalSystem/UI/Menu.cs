@@ -88,15 +88,13 @@ namespace HospitalSystem.UI
                 Console.WriteLine("Race condition demo is not available.");
             }
         }
+
         private void AddHospital()
         {
-            Console.Write("Enter hospital ID: ");
-            if (!int.TryParse(Console.ReadLine(), out int id)) return;
-
             Console.Write("Enter hospital name: ");
             var name = Console.ReadLine();
 
-            _repository.Add(new Hospital { Id = id, Name = name });
+            _repository.Add(new Hospital {Name = name });
             Console.WriteLine($"Hospital '{name}' added successfully.");
         }
 
@@ -134,17 +132,12 @@ namespace HospitalSystem.UI
         {
             Console.Write("Enter hospital ID: ");
             if (!int.TryParse(Console.ReadLine(), out int hospitalId)) return;
-
-            Console.Write("Enter doctor ID: ");
-            if (!int.TryParse(Console.ReadLine(), out int doctorId)) return;
-
             Console.Write("Enter doctor name: ");
             var name = Console.ReadLine();
-
             Console.Write("Enter doctor specialty: ");
             var specialty = Console.ReadLine();
 
-            _doctorService.AddDoctor(hospitalId, new Doctor { Id = doctorId, Name = name, Specialty = specialty });
+            _doctorService.AddDoctor(hospitalId, new Doctor {Name = name, Specialty = specialty });
             Console.WriteLine($"Doctor '{name}' added successfully.");
         }
 

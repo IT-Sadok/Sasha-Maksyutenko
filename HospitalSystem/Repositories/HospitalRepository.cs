@@ -12,7 +12,7 @@ namespace HospitalSystem.Repositories
 
         public void Add(Hospital hospital)
         {
-            _hospitals.Add(hospital);
+            hospital.Id = _hospitals.Count > 0 ? _hospitals.Max(h => h.Id) + 1 : 1;
         }
 
         public IEnumerable<Hospital> GetAll()
