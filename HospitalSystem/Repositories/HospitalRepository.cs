@@ -24,5 +24,10 @@ namespace HospitalSystem.Repositories
         {
             return _hospitals.FirstOrDefault(h => h.Id == id);
         }
+
+        public void Save()
+        {
+            throw new NotSupportedException("In-memory repository does not support saving.");
+        }
     }
 }

@@ -11,13 +11,11 @@ namespace HospitalSystem.UI
     {
         private readonly IHospitalRepository _repository;
         private readonly IDoctorService _doctorService;
-        private readonly IPersistable? _persistable;
         private readonly RaceConditionDemo? _demo;
-        public Menu(IHospitalRepository repository, RaceConditionDemo demo, IDoctorService doctorService, IPersistable? persistable = null)
+        public Menu(IHospitalRepository repository, RaceConditionDemo demo, IDoctorService doctorService)
         {
             _repository = repository;
             _doctorService = doctorService;
-            _persistable = persistable;
             _demo = demo;
         }
 
@@ -104,15 +102,8 @@ namespace HospitalSystem.UI
 
         private void SaveChanges()
         {
-            if(_persistable != null)
-            {
-                _persistable.Save();
-                Console.WriteLine("Changes saved successfully.");
-            }
-            else
-            {
-                Console.WriteLine("Save operation is not supported.");
-            }
+            _repository.Save();
+            Console.WriteLine("Changes saved successfully.");
         }
 
         private void UpdateDoctorInformation()

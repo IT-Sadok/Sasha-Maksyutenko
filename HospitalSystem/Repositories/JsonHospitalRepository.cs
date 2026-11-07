@@ -4,7 +4,7 @@ using HospitalSystem.Models;
 
 namespace HospitalSystem.Repositories
 {
-    public class JsonHospitalRepository : IHospitalRepository, IPersistable
+    public class JsonHospitalRepository : IHospitalRepository
     {
         private readonly string _filePath;
         private List<Hospital> _hospitals;
