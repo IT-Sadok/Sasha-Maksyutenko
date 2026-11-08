@@ -8,17 +8,28 @@ namespace HospitalSystem.Repositories
     {
         private readonly string _filePath;
         private List<Hospital> _hospitals;
-        public JsonHospitalRepository(string filePath)
+        private JsonHospitalRepository(string filePath, List<Hospital> hospitals)
         {
             _filePath = filePath;
-            if(File.Exists(_filePath))
+            _hospitals = hospitals;
+        }
+
+        public static JsonHospitalRepository Create(string filePath)
+        {
+            try
             {
-                var json = File.ReadAllText(_filePath);
-                _hospitals = System.Text.Json.JsonSerializer.Deserialize<List<Hospital>>(json) ?? new List<Hospital>();
+                if (File.Exists(filePath))
+                {
+                    var json = File.ReadAllText(filePath);
+                    var hospitals = System.Text.Json.JsonSerializer.Deserialize<List<Hospital>>(json) ?? new List<Hospital>();
+                    return new JsonHospitalRepository(filePath, hospitals);
+                }
+                return new JsonHospitalRepository(filePath, new List<Hospital>());
             }
-            else
+            catch (Exception ex)
             {
-                _hospitals = new List<Hospital>();
+                Console.WriteLine($"Failed to load data: {ex.Message}");
+                return new JsonHospitalRepository(filePath, new List<Hospital>());
             }
         }
 
