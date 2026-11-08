@@ -6,4 +6,4 @@ var repository =JsonHospitalRepository.Create("hospitals.json");
 var doctorService = new DoctorService(repository);
 var demo = new RaceConditionDemo();
 var menu = new Menu(repository, demo, doctorService);
-menu.Run();
+await menu.Run();

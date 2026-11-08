@@ -34,7 +34,7 @@ namespace HospitalSystem.UI
             Console.WriteLine("0. Exit");
             Console.WriteLine("----------------------------------");
         }
-        public void Run()
+        public async Task Run()
         {
             while (true)
             {
@@ -65,7 +65,7 @@ namespace HospitalSystem.UI
                         AddHospital();
                         break;
                     case "8":
-                        StartDemo();
+                        await StartDemo();
                         break;
                     case "0":
                         return;
@@ -76,12 +76,12 @@ namespace HospitalSystem.UI
             }
         }
 
-        private void StartDemo()
+        private async Task StartDemo()
         {
             if (_demo != null)
             {
-                _demo.RunDemo();
-                _demo.RunDemoWithLock();
+                await _demo.RunDemo();
+                await _demo.RunDemoWithLock();
             }
             else
             {
