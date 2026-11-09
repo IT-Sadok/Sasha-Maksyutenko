@@ -35,4 +35,3 @@ msbuild.wrn
 **/.idea/**
 
 # Sensitive configuration
-**/appsettings.json
