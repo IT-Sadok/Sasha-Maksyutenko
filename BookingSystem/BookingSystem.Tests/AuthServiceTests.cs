@@ -35,13 +35,7 @@ namespace BookingSystem.Tests
             _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
      .Callback<ApplicationUser, string>((user, _) => user.Id = Guid.NewGuid().ToString())
      .ReturnsAsync(IdentityResult.Success);
-            var dto = new RegisterDTO
-            {
-                Name="Test",
-                Email = "test@example.com",
-                Password = "Password123!",
-                Role=Role.Client
-            };
+            var dto = new RegisterDTO("Test", "test@example.com", "Password123!", Role.Client);
             // Act
             var result = await _authService.RegisterAsync(dto);
             // Assert
@@ -55,13 +49,7 @@ namespace BookingSystem.Tests
             // Arrange
             _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Email already exists" }));
-            var dto = new RegisterDTO
-            {
-                Name = "Test",
-                Email = "test@example.com",
-                Password = "Password123!",
-                Role = Role.Client
-            };
+            var dto = new RegisterDTO("Test", "test@example.com", "Password123!", Role.Client);
             // Act & Assert
             await Should.ThrowAsync<Exception>(async () => await _authService.RegisterAsync(dto));
         }
@@ -70,7 +58,7 @@ namespace BookingSystem.Tests
         public async Task LoginAsync_Should_ReturnAuthResponse_When_CredentialsAreValid()
         {
             // Arrange
-            var user = new LoginDTO { Email = "test@example.com", Password = "Password123!" };
+            var user = new LoginDTO("test@example.com", "Password123!");
             var appUser = new ApplicationUser { Id = Guid.NewGuid().ToString(), Email = "test@example.com", Role = Role.Client };
             _userManagerMock.Setup(x => x.FindByEmailAsync(user.Email)).ReturnsAsync(appUser);
             _ = _userManagerMock.Setup(x => x.CheckPasswordAsync(null, user.Password)).ReturnsAsync(false);
@@ -86,11 +74,7 @@ namespace BookingSystem.Tests
         public async Task LoginAsync_Should_ThrowException_When_UserNotFound()
         {
             // Arrange
-            var user = new LoginDTO
-            {
-                Email = "nonexistent@example.com",
-                Password = "Password123!"
-            };
+            var user = new LoginDTO("nonexistent@example.com", "Password123!");
             _userManagerMock.Setup(x => x.FindByEmailAsync(user.Email)).ReturnsAsync(null as ApplicationUser);
 
             // Act & Assert
@@ -101,11 +85,7 @@ namespace BookingSystem.Tests
         public async Task LoginAsync_Should_ThrowException_When_PasswordIsInvalid()
         {
             // Arrange
-            var user = new LoginDTO
-            {
-                Email = "test@example.com",
-                Password = "WrongPassword123!"
-            };
+            var user = new LoginDTO("test@example.com", "WrongPassword123!");
             var appUser = new ApplicationUser { Id = Guid.NewGuid().ToString(), Email = "test@example.com", Role = Role.Client };
             _userManagerMock.Setup(x => x.FindByEmailAsync(user.Email)).ReturnsAsync(appUser);
             _userManagerMock.Setup(x => x.CheckPasswordAsync(appUser, user.Password)).ReturnsAsync(false);

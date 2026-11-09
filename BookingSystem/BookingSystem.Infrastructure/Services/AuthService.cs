@@ -24,12 +24,7 @@ namespace BookingSystem.Infrastructure.Services
         {
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
            if(user==null || !await _userManager.CheckPasswordAsync(user, loginDTO.Password)) throw new Exception("Invalid credentials");
-            return new AuthResponseDTO
-            {
-                JwtToken = GenerateJwtToken(user),
-                UserId = Guid.Parse(user.Id),
-                Role = user.Role,
-            };
+            return new AuthResponseDTO(GenerateJwtToken(user), Guid.Parse(user.Id), user.Role);
         }
         public async Task<AuthResponseDTO> RegisterAsync(RegisterDTO registerDTO)
         {
@@ -42,12 +37,7 @@ namespace BookingSystem.Infrastructure.Services
             };
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
             if(!result.Succeeded) throw new Exception(string.Join(",",result.Errors.Select(e => e.Description)));
-            return new AuthResponseDTO
-            {
-                JwtToken = GenerateJwtToken(user),
-                UserId = Guid.Parse(user.Id),
-                Role = user.Role,
-            };
+            return new AuthResponseDTO(GenerateJwtToken(user), Guid.Parse(user.Id), user.Role);
         }
         private string GenerateJwtToken(ApplicationUser user)
         {

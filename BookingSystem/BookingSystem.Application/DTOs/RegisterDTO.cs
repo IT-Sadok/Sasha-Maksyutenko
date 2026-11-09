@@ -1,14 +1,6 @@
-﻿
-
-using BookingSystem.Domain.Enums;
+﻿using BookingSystem.Domain.Enums;
 
 namespace BookingSystem.Application.DTOs
 {
-    public class RegisterDTO
-    {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public Role Role { get; set; }
-    }
+    public record RegisterDTO(string Name, string Email, string Password, Role Role);
 }
