@@ -2,7 +2,7 @@
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,11 +13,11 @@ namespace BookingSystem.Infrastructure.Services
     public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IConfiguration _configuration;
-        public AuthService(UserManager<ApplicationUser> userManager,IConfiguration configuration)
+        private readonly IOptions<JwtOptions> _jwtOptions;
+        public AuthService(UserManager<ApplicationUser> userManager,IOptions<JwtOptions> jwtOptions)
         {
             _userManager = userManager;
-            _configuration = configuration;
+            _jwtOptions = jwtOptions;
         }
         public async Task<AuthResponseDTO> LoginAsync(LoginDTO loginDTO)
         {
@@ -56,10 +56,10 @@ namespace BookingSystem.Infrastructure.Services
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
-            var key=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]!));
+            var key=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Value.Secret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token =new JwtSecurityToken(
-                expires:DateTime.UtcNow.AddHours(24),
+                expires:DateTime.UtcNow.AddHours(_jwtOptions.Value.ExpirationHours),
                 claims: claims,
                 signingCredentials: creds
             );
