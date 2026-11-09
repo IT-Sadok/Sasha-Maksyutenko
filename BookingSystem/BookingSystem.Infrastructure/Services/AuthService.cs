@@ -1,13 +1,14 @@
 ﻿using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Infrastructure.Data;
+using BookingSystem.Application.Options;
+using BookingSystem.Application.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BookingSystem.Application.Options;
 
 namespace BookingSystem.Infrastructure.Services
 {
@@ -23,7 +24,7 @@ namespace BookingSystem.Infrastructure.Services
         public async Task<AuthResponseDTO> LoginAsync(LoginDTO loginDTO)
         {
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
-           if(user==null || !await _userManager.CheckPasswordAsync(user, loginDTO.Password)) throw new Exception("Invalid credentials");
+           if(user==null || !await _userManager.CheckPasswordAsync(user, loginDTO.Password)) throw new AuthenticationException("Invalid credentials");
             return new AuthResponseDTO(GenerateJwtToken(user), Guid.Parse(user.Id), user.Role);
         }
         public async Task<AuthResponseDTO> RegisterAsync(RegisterDTO registerDTO)
@@ -36,7 +37,7 @@ namespace BookingSystem.Infrastructure.Services
                 Role = registerDTO.Role
             };
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
-            if(!result.Succeeded) throw new Exception(string.Join(",",result.Errors.Select(e => e.Description)));
+            if(!result.Succeeded) throw new ValidationException(result.Errors.Select(e => e.Description));
             return new AuthResponseDTO(GenerateJwtToken(user), Guid.Parse(user.Id), user.Role);
         }
         private string GenerateJwtToken(ApplicationUser user)
