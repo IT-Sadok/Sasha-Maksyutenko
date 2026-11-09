@@ -19,21 +19,15 @@ namespace BookingSystem.API.Controllers
             _loginValidator = loginValidator;
             _registerValidator = registerValidator; 
         }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
             var validationResult = await _registerValidator.ValidateAsync(registerDTO);
             if (!validationResult.IsValid)
-            {
                 return BadRequest(validationResult.Errors);
-            }
-            try {
-                var result = await _authService.RegisterAsync(registerDTO);
-                return Ok(result);
-            }
-            catch(Exception ex) {
-                return BadRequest($"{ex.Message}, Registration failed");
-            }
+            var result = await _authService.RegisterAsync(registerDTO);
+            return Ok(result);
         }
 
         [HttpPost("login")]
@@ -41,16 +35,9 @@ namespace BookingSystem.API.Controllers
         {
             var validationResult = await _loginValidator.ValidateAsync(loginDTO);
             if (!validationResult.IsValid)
-            {
                 return BadRequest(validationResult.Errors);
-            }
-            try {
-                var result = await _authService.LoginAsync(loginDTO);
-                return Ok(result);
-            }
-            catch(Exception ex) {
-                return BadRequest($"{ex.Message}, Login failed");
-            }
+            var result = await _authService.LoginAsync(loginDTO);
+            return Ok(result);
         }
     }
 }
