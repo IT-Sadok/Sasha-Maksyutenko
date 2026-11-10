@@ -12,6 +12,7 @@ using BookingSystem.Application.Options;
 using BookingSystem.API.Middleware;
 using BookingSystem.API.Filters;
 using BookingSystem.Application.DTOs;
+using BookingSystem.Domain.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>(optional: true);
@@ -78,4 +79,17 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    string[] roles = [Roles.Client, Roles.Host];
+    foreach (var role in roles)
+    {
+        if(!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+}
 app.Run();

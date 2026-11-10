@@ -1,8 +1,8 @@
 ﻿
 using BookingSystem.Application.DTOs;
-using BookingSystem.Domain.Enums;
 using BookingSystem.Infrastructure.Data;
 using BookingSystem.Infrastructure.Services;
+using BookingSystem.Domain.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using BookingSystem.Application.Options;
@@ -35,7 +35,7 @@ namespace BookingSystem.Tests
             _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
      .Callback<ApplicationUser, string>((user, _) => user.Id = Guid.NewGuid().ToString())
      .ReturnsAsync(IdentityResult.Success);
-            var dto = new RegisterDTO("Test", "test@example.com", "Password123!", Role.Client);
+            var dto = new RegisterDTO("Test", "test@example.com", "Password123!", Roles.Client);
             // Act
             var result = await _authService.RegisterAsync(dto);
             // Assert
@@ -49,7 +49,7 @@ namespace BookingSystem.Tests
             // Arrange
             _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Email already exists" }));
-            var dto = new RegisterDTO("Test", "test@example.com", "Password123!", Role.Client);
+            var dto = new RegisterDTO("Test", "test@example.com", "Password123!", Roles.Client);
             // Act & Assert
             await Should.ThrowAsync<Exception>(async () => await _authService.RegisterAsync(dto));
         }
@@ -59,10 +59,11 @@ namespace BookingSystem.Tests
         {
             // Arrange
             var user = new LoginDTO("test@example.com", "Password123!");
-            var appUser = new ApplicationUser { Id = Guid.NewGuid().ToString(), Email = "test@example.com", Role = Role.Client };
+            var appUser = new ApplicationUser { Id = Guid.NewGuid().ToString(), Email = "test@example.com"};
             _userManagerMock.Setup(x => x.FindByEmailAsync(user.Email)).ReturnsAsync(appUser);
             _ = _userManagerMock.Setup(x => x.CheckPasswordAsync(null, user.Password)).ReturnsAsync(false);
             _userManagerMock.Setup(x => x.CheckPasswordAsync(appUser, user.Password)).ReturnsAsync(true);
+            _userManagerMock.Setup(x => x.GetRolesAsync(appUser)).ReturnsAsync(new List<string> { Roles.Client });
             // Act
             var result = await _authService.LoginAsync(user);
             // Assert
@@ -86,7 +87,7 @@ namespace BookingSystem.Tests
         {
             // Arrange
             var user = new LoginDTO("test@example.com", "WrongPassword123!");
-            var appUser = new ApplicationUser { Id = Guid.NewGuid().ToString(), Email = "test@example.com", Role = Role.Client };
+            var appUser = new ApplicationUser { Id = Guid.NewGuid().ToString(), Email = "test@example.com"};
             _userManagerMock.Setup(x => x.FindByEmailAsync(user.Email)).ReturnsAsync(appUser);
             _userManagerMock.Setup(x => x.CheckPasswordAsync(appUser, user.Password)).ReturnsAsync(false);
 
