@@ -1,6 +1,7 @@
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Application.Validators;
 using BookingSystem.Infrastructure.Data;
+using BookingSystem.Domain.Entities;
 using BookingSystem.Infrastructure.Repositories;
 using BookingSystem.Infrastructure.Services;
 using FluentValidation;
@@ -69,6 +70,7 @@ builder.Services.AddScoped<IApartmentService, ApartmentService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IUserManagerWrapper, UserManagerWrapper>();
 var app = builder.Build();
 
 app.UseSwagger();

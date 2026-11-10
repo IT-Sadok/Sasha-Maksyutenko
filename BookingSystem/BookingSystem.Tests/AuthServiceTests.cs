@@ -1,11 +1,12 @@
 ﻿
 using BookingSystem.Application.DTOs;
-using BookingSystem.Infrastructure.Data;
-using BookingSystem.Infrastructure.Services;
+using BookingSystem.Application.Interfaces;
+using BookingSystem.Application.Options;
 using BookingSystem.Domain.Constants;
+using BookingSystem.Domain.Entities;
+using BookingSystem.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using BookingSystem.Application.Options;
 using Moq;
 using Shouldly;
 
@@ -13,13 +14,12 @@ namespace BookingSystem.Tests
 {
     public class AuthServiceTests
     {
-        private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
+        private readonly Mock<IUserManagerWrapper> _userManagerMock;
         private readonly IOptions<JwtOptions> _jwtOptions;
         private readonly AuthService _authService;
         public AuthServiceTests()
         {
-            var store = new Mock<IUserStore<ApplicationUser>>();
-            _userManagerMock = new Mock<UserManager<ApplicationUser>>(store.Object, null, null, null, null, null, null, null, null);
+            _userManagerMock = new Mock<IUserManagerWrapper>();
             _jwtOptions = Options.Create(new JwtOptions
             {
                 Secret = "ThisIsASecretKeyForJwtTokenGeneration",

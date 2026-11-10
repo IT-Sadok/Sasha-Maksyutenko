@@ -1,9 +1,8 @@
 ﻿using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
-using BookingSystem.Infrastructure.Data;
+using BookingSystem.Domain.Entities;
 using BookingSystem.Application.Options;
 using BookingSystem.Application.Exceptions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,9 +13,9 @@ namespace BookingSystem.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserManagerWrapper _userManager;
         private readonly IOptions<JwtOptions> _jwtOptions;
-        public AuthService(UserManager<ApplicationUser> userManager,IOptions<JwtOptions> jwtOptions)
+        public AuthService(IUserManagerWrapper userManager,IOptions<JwtOptions> jwtOptions)
         {
             _userManager = userManager;
             _jwtOptions = jwtOptions;
