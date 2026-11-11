@@ -4,7 +4,7 @@ using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Domain.Entities;
 
-namespace BookingSystem.Infrastructure.Services
+namespace BookingSystem.Application.Services
 {
     public class BookingService : IBookingService
     {

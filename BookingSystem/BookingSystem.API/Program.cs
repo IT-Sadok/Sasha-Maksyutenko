@@ -2,7 +2,7 @@ using BookingSystem.Application.Interfaces;
 using BookingSystem.Application.Validators;
 using BookingSystem.Infrastructure.Data;
 using BookingSystem.Infrastructure.Repositories;
-using BookingSystem.Infrastructure.Services;
+using BookingSystem.Application.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
