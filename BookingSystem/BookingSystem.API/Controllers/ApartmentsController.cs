@@ -18,7 +18,7 @@ namespace BookingSystem.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Host")]
         public async Task<IActionResult> CreateApartment([FromBody] ApartmentDto apartmentDto)
         {
             var hostId = User.FindFirstValue(ClaimTypes.NameIdentifier);
