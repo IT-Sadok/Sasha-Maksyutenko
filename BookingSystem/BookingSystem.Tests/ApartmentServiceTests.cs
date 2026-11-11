@@ -79,13 +79,7 @@ namespace BookingSystem.Tests
         {
             // Arrange
             var hostId = "host1";
-            var apartmentDto = new ApartmentDto
-            {
-                Name = "New Apartment",
-                IsAvailable = true,
-                Price = 200,
-                NumberOfRooms = 3
-            };
+            var apartmentDto = new CreateApartmentRequest("New Apartment", 200, 3);
             _apartmentRepositoryMock.Setup(x=>x.AddApartment(It.IsAny<Apartment>())).ReturnsAsync((Apartment apartment) => { apartment.Id=Guid.NewGuid(); return apartment; });
            
             // Act

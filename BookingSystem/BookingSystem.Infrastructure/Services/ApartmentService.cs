@@ -13,14 +13,14 @@ namespace BookingSystem.Infrastructure.Services
             _apartmentRepository = apartmentRepository;
         }
 
-        public async Task<ApartmentDto> CreateApartmentAsync(ApartmentDto apartmentDto, string hostId)
+        public async Task<ApartmentDto> CreateApartmentAsync(CreateApartmentRequest createApartmentRequest, string hostId)
         {
             var apartment = await _apartmentRepository.AddApartment(new Apartment
             {
-                Name = apartmentDto.Name,
-                Price = apartmentDto.Price,
-                NumberOfRooms = apartmentDto.NumberOfRooms,
-                IsAvailable = apartmentDto.IsAvailable,
+                Name = createApartmentRequest.Name,
+                Price = createApartmentRequest.Price,
+                NumberOfRooms = createApartmentRequest.NumberOfRooms,
+                IsAvailable = true,
                 HostId = hostId
             });
             return new ApartmentDto{

@@ -1,7 +1,6 @@
 ﻿using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -19,10 +18,10 @@ namespace BookingSystem.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Host")]
-        public async Task<IActionResult> CreateApartment([FromBody] ApartmentDto apartmentDto)
+        public async Task<IActionResult> CreateApartment([FromBody] CreateApartmentRequest createApartmentRequest)
         {
-            var hostId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = await _apartmentService.CreateApartmentAsync(apartmentDto, hostId);
+            var hostId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var result = await _apartmentService.CreateApartmentAsync(createApartmentRequest, hostId);
             return Ok(result);
         }
 
