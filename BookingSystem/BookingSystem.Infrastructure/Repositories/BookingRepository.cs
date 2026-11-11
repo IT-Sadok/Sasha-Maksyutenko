@@ -12,8 +12,6 @@ namespace BookingSystem.Infrastructure.Repositories
         public BookingRepository(AppDbContext context) => _context = context;
         public async Task<Booking> CreateBooking(Booking booking)
         {
-            booking.StartDate = DateTime.SpecifyKind(booking.StartDate, DateTimeKind.Utc);
-            booking.EndDate = DateTime.SpecifyKind(booking.EndDate, DateTimeKind.Utc);
             booking.Id = Guid.NewGuid();
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
@@ -30,8 +28,6 @@ namespace BookingSystem.Infrastructure.Repositories
 
         public async Task<bool> IsBookingAvailable(Guid apartmentId, DateTime startDate, DateTime endDate)
         {
-            startDate = DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
-            endDate = DateTime.SpecifyKind(endDate, DateTimeKind.Utc);
             return !await _context.Bookings.AnyAsync(b =>b.ApartmentId == apartmentId && b.StartDate < endDate && b.EndDate > startDate);
         }
     }
