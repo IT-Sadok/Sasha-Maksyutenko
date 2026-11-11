@@ -2,7 +2,7 @@
 using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Domain.Entities;
-using BookingSystem.Infrastructure.Services;
+using BookingSystem.Application.Services;
 using Moq;
 using Shouldly;
 
