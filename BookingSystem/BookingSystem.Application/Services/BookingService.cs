@@ -3,6 +3,7 @@
 using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Domain.Entities;
+using Mapster;
 
 namespace BookingSystem.Application.Services
 {
@@ -39,30 +40,19 @@ namespace BookingSystem.Application.Services
                 TotalPrice = totalPrice,
             });
 
-            return new BookingDTO
-            {
-                Id = booking.Id,
-                UserId = booking.UserId,
-                ApartmentId = booking.ApartmentId,
-                StartDate = booking.StartDate,
-                EndDate = booking.EndDate,
-                TotalPrice = booking.TotalPrice,
-                ApartmentName = apartment.Name
-            };
+            var result = booking.Adapt<BookingDTO>();
+            result.ApartmentName = apartment.Name;
+            return result;
         }
 
         public async Task<IEnumerable<BookingDTO>> GetBookingsByUserIdAsync(string userId)
         {
             var bookings = await _bookingRepository.GetBookingsByUserId(userId);
-            return bookings.Select(booking => new BookingDTO
+            return bookings.Select(booking =>
             {
-                Id = booking.Id,
-                UserId = booking.UserId,
-                ApartmentId = booking.ApartmentId,
-                StartDate = booking.StartDate,
-                EndDate = booking.EndDate,
-                TotalPrice = booking.TotalPrice,
-                ApartmentName = booking.Apartment.Name
+                var dto = booking.Adapt<BookingDTO>();
+                dto.ApartmentName = booking.Apartment.Name;
+                return dto;
             });
         }
 

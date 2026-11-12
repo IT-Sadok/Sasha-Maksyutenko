@@ -2,6 +2,7 @@
 using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Domain.Entities;
+using Mapster;
 
 namespace BookingSystem.Application.Services
 {
@@ -23,57 +24,26 @@ namespace BookingSystem.Application.Services
                 IsAvailable = true,
                 HostId = hostId
             });
-            return new ApartmentDto{
-                Id = apartment.Id,
-                Name = apartment.Name,
-                IsAvailable = apartment.IsAvailable,
-                Price = apartment.Price,
-                NumberOfRooms = apartment.NumberOfRooms,
-                HostId = apartment.HostId
-            };
+            return apartment.Adapt<ApartmentDto>();
         }
 
         public async Task<ApartmentDto?> GetApartmentByIdAsync(Guid apartmentId)
         {
             var apartment = await _apartmentRepository.GetApartmentById(apartmentId);
             if (apartment == null) return null;
-            return new ApartmentDto
-            {
-                Id = apartment.Id,
-                Name = apartment.Name,
-                IsAvailable = apartment.IsAvailable,
-                Price = apartment.Price,
-                NumberOfRooms = apartment.NumberOfRooms,
-                HostId = apartment.HostId,
-            };
+            return apartment.Adapt<ApartmentDto>();
         }
 
         public async Task<IEnumerable<ApartmentDto>> GetAvailableApartmentsAsync(DateTime start, DateTime end)
         {
             var apartments = await _apartmentRepository.GetAvailableApartments(start, end);
-            return apartments.Select(apartment => new ApartmentDto
-            {
-                Id = apartment.Id,
-                Name = apartment.Name,
-                IsAvailable = apartment.IsAvailable,
-                Price = apartment.Price,
-                NumberOfRooms = apartment.NumberOfRooms,
-                HostId = apartment.HostId,
-            });
+            return apartments.Adapt<IEnumerable<ApartmentDto>>();
         }
 
         public async Task<IEnumerable<ApartmentDto>> ListApartmentsAsync()
         {
             var apartments = await _apartmentRepository.GetAll();
-            return apartments.Select(apartment => new ApartmentDto
-            {
-                Id = apartment.Id,
-                Name = apartment.Name,
-                IsAvailable = apartment.IsAvailable,
-                Price = apartment.Price,
-                NumberOfRooms = apartment.NumberOfRooms,
-                HostId = apartment.HostId,
-            });
+            return apartments.Adapt<IEnumerable<ApartmentDto>>();
         }
     }
 }
