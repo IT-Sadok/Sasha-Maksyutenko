@@ -2,7 +2,6 @@
 using BookingSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BookingSystem.API.Controllers
 {
@@ -11,16 +10,18 @@ namespace BookingSystem.API.Controllers
     public class ApartmentsController : ControllerBase
     {
         private readonly IApartmentService _apartmentService;
-        public ApartmentsController(IApartmentService apartmentService)
+        private readonly IUserContext _userContext;
+        public ApartmentsController(IApartmentService apartmentService, IUserContext userContext)
         {
             _apartmentService = apartmentService;
+            _userContext = userContext;
         }
 
         [HttpPost]
         [Authorize(Roles = "Host")]
         public async Task<IActionResult> CreateApartment([FromBody] CreateApartmentRequest createApartmentRequest)
         {
-            var hostId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var hostId = _userContext.UserId;
             var result = await _apartmentService.CreateApartmentAsync(createApartmentRequest, hostId);
             return Ok(result);
         }
