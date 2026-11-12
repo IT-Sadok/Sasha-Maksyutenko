@@ -64,14 +64,15 @@ namespace BookingSystem.Tests
                 new Apartment { Id = Guid.NewGuid(), Name = "Apartment 1", HostId = "host1", IsAvailable = true, Price = 100, NumberOfRooms = 2 },
                 new Apartment { Id = Guid.NewGuid(), Name = "Apartment 2", HostId = "host2", IsAvailable = false, Price = 150, NumberOfRooms = 3 }
             };
-            _apartmentRepositoryMock.Setup(x => x.GetAll()).ReturnsAsync(apartments);
+            _apartmentRepositoryMock.Setup(x => x.GetAll(1, 10)).ReturnsAsync((apartments.AsEnumerable(), 2));
             
             //Act
-            var result = await _apartmentService.ListApartmentsAsync();
+            var result = await _apartmentService.ListApartmentsAsync(1,10);
             
             //Assert
             result.ShouldNotBeNull();
-            result.Count().ShouldBe(2);
+            result.Items.Count().ShouldBe(2);
+            result.TotalCount.ShouldBe(2);
         }
 
         [Fact]

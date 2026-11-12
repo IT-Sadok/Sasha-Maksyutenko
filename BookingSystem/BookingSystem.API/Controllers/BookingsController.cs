@@ -28,9 +28,9 @@ namespace BookingSystem.API.Controllers
 
         [HttpGet("my")]
         [Authorize]
-        public async Task<IActionResult> GetMyBookings()
+        public async Task<IActionResult> GetMyBookings([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await _bookingService.GetBookingsByUserIdAsync(_userContext.UserId);
+            var result = await _bookingService.GetBookingsByUserIdAsync(_userContext.UserId, page, pageSize);
             return Ok(result);
         }
     }

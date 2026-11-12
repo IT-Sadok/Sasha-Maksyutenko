@@ -2,6 +2,7 @@
 using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Domain.Entities;
+
 using Mapster;
 
 namespace BookingSystem.Application.Services
@@ -34,16 +35,17 @@ namespace BookingSystem.Application.Services
             return apartment.Adapt<ApartmentDto>();
         }
 
-        public async Task<IEnumerable<ApartmentDto>> GetAvailableApartmentsAsync(DateTime start, DateTime end)
+        public async Task<PagedResult<ApartmentDto>> GetAvailableApartmentsAsync(DateTime start, DateTime end,int page, int pageSize)
         {
-            var apartments = await _apartmentRepository.GetAvailableApartments(start, end);
-            return apartments.Adapt<IEnumerable<ApartmentDto>>();
+            var (items, totalCount) = await _apartmentRepository.GetAvailableApartments(start, end, page, pageSize);
+
+            return new PagedResult<ApartmentDto>(items.Adapt<IEnumerable<ApartmentDto>>(), totalCount, page, pageSize);
         }
 
-        public async Task<IEnumerable<ApartmentDto>> ListApartmentsAsync()
+        public async Task<PagedResult<ApartmentDto>> ListApartmentsAsync(int page, int pageSize)
         {
-            var apartments = await _apartmentRepository.GetAll();
-            return apartments.Adapt<IEnumerable<ApartmentDto>>();
+            var (items, totalCount) = await _apartmentRepository.GetAll(page, pageSize);
+            return new PagedResult<ApartmentDto>(items.Adapt<IEnumerable<ApartmentDto>>(), totalCount, page, pageSize);
         }
     }
 }

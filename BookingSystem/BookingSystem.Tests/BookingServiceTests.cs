@@ -70,13 +70,13 @@ namespace BookingSystem.Tests
                     Apartment=new Apartment{Name="Test Apartment"}
                 },
             };
-            _bookingRepositoryMock.Setup(x => x.GetBookingsByUserId(userId)).ReturnsAsync(bookings);
+            _bookingRepositoryMock.Setup(x => x.GetBookingsByUserId(userId, 1, 10)).ReturnsAsync((bookings.AsEnumerable(), 1));
             //Act
-            var result = await _bookingService.GetBookingsByUserIdAsync(userId);
+            var result = await _bookingService.GetBookingsByUserIdAsync(userId,1,10);
             //Assert
             result.ShouldNotBeNull();
-            result.Count().ShouldBe(1);
-            result.First().ApartmentName.ShouldBe("Test Apartment");
+            result.Items.Count().ShouldBe(1);
+            result.Items.First().ApartmentName.ShouldBe("Test Apartment");
         }
     }
 }

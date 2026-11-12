@@ -27,9 +27,9 @@ namespace BookingSystem.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetApartments()
+        public async Task<IActionResult> GetApartments([FromQuery] int page=1, [FromQuery] int pageSize=10)
         {
-            var apartments = await _apartmentService.ListApartmentsAsync();
+            var apartments = await _apartmentService.ListApartmentsAsync(page, pageSize);
             return Ok(apartments);
         }
 
@@ -45,9 +45,9 @@ namespace BookingSystem.API.Controllers
         }
 
         [HttpGet("available")]
-        public async Task<IActionResult> GetAvailableApartments([FromQuery] DateTime start, [FromQuery] DateTime end)
+        public async Task<IActionResult> GetAvailableApartments([FromQuery] DateTime start, [FromQuery] DateTime end, [FromQuery] int page=1, [FromQuery] int pageSize=10)
         {
-            var apartments = await _apartmentService.GetAvailableApartmentsAsync(start, end);
+            var apartments = await _apartmentService.GetAvailableApartmentsAsync(start, end, page, pageSize);
             return Ok(apartments);
         }
     }

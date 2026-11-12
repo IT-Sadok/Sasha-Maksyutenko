@@ -22,9 +22,14 @@ namespace BookingSystem.Infrastructure.Repositories
             return apartment;
         }
 
-        public async Task<IEnumerable<Apartment>> GetAll()
+        public async Task<(IEnumerable<Apartment> Items, int TotalCount)> GetAll(int page, int pageSize)
         {
-            return await _context.Apartments.ToListAsync();
+            var totalCount = await _context.Apartments.CountAsync();
+            var items = await _context.Apartments
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (items, totalCount);
         }
 
         public async Task<Apartment?> GetApartmentById(Guid apartmentId)
@@ -32,11 +37,16 @@ namespace BookingSystem.Infrastructure.Repositories
             return await _context.Apartments.FindAsync(apartmentId);
         }
 
-        public async Task<IEnumerable<Apartment>> GetAvailableApartments(DateTime startDate, DateTime endDate)
+        public async Task<(IEnumerable<Apartment> Items, int TotalCount)> GetAvailableApartments(DateTime startDate, DateTime endDate, int page, int pageSize)
         {
-            return await _context.Apartments
-                .Where(a => !_context.Bookings.Any(b => b.ApartmentId == a.Id && b.StartDate < endDate && b.EndDate > startDate))
+            var query = _context.Apartments
+                .Where(a => a.IsAvailable && !_context.Bookings.Any(b => b.ApartmentId == a.Id && b.StartDate < endDate && b.EndDate > startDate));
+            var totalCount = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+            return (items, totalCount);
         }
     }
 }

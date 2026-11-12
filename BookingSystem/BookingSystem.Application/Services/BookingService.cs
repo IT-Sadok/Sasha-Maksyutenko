@@ -45,15 +45,17 @@ namespace BookingSystem.Application.Services
             return result;
         }
 
-        public async Task<IEnumerable<BookingDTO>> GetBookingsByUserIdAsync(string userId)
+        public async Task<PagedResult<BookingDTO>> GetBookingsByUserIdAsync(string userId, int page, int pageSize)
         {
-            var bookings = await _bookingRepository.GetBookingsByUserId(userId);
-            return bookings.Select(booking =>
-            {
-                var dto = booking.Adapt<BookingDTO>();
-                dto.ApartmentName = booking.Apartment.Name;
-                return dto;
-            });
+            var (items, totalCount) = await _bookingRepository.GetBookingsByUserId(userId, page, pageSize);
+            var dtos = items.Select(
+                booking =>
+                {
+                    var dto = booking.Adapt<BookingDTO>();
+                    dto.ApartmentName = booking.Apartment.Name;
+                    return dto;
+                });
+            return new PagedResult<BookingDTO>(dtos, totalCount, page, pageSize);
         }
 
         public async Task<bool> IsBookingAvailable(Guid apartmentId, DateTime startDate, DateTime endDate)

@@ -18,12 +18,17 @@ namespace BookingSystem.Infrastructure.Repositories
             return booking;
         }
 
-        public async Task<IEnumerable<Booking>> GetBookingsByUserId(string userId)
+        public async Task<(IEnumerable<Booking> Items, int TotalCount)> GetBookingsByUserId(string userId, int page, int pageSize)
         {
-            return await _context.Bookings
+            var query = _context.Bookings
                 .Include(b => b.Apartment)
-                .Where(b => b.UserId == userId)
+                .Where(b => b.UserId == userId);
+            var totalCount = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+            return (items, totalCount);
         }
 
         public async Task<bool> IsBookingAvailable(Guid apartmentId, DateTime startDate, DateTime endDate)
