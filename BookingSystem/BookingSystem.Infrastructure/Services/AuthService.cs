@@ -59,6 +59,8 @@ namespace BookingSystem.Infrastructure.Services
             var key=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token =new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
                 expires:DateTime.UtcNow.AddHours(24),
                 claims: claims,
                 signingCredentials: creds
