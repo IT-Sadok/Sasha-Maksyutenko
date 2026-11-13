@@ -8,6 +8,5 @@ namespace BookingSystem.Application.Interfaces
     {
         Task<BookingDTO> CreateBookingAsync(CreateBookingDTO bookingDto, string userId);
         Task<PagedResult<BookingDTO>> GetBookingsByUserIdAsync(string userId, int page, int pageSize);
-        Task<bool> IsBookingAvailable(Guid apartmentId, DateTime startDate, DateTime endDate);
     }
 }

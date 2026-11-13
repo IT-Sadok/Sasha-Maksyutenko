@@ -19,15 +19,6 @@ namespace BookingSystem.Application.Services
         }
         public async Task<BookingDTO> CreateBookingAsync(CreateBookingDTO bookingDto, string userId)
         {
-            var isAvailable = await _bookingRepository.IsBookingAvailable(
-                bookingDto.ApartmentId,
-                bookingDto.StartDate,
-                bookingDto.EndDate);
-            if (!isAvailable)
-            {
-                throw new Exception("The apartment is not available for the selected dates.");
-            }
-
             var apartment = await _apartmentRepository.GetApartmentById(bookingDto.ApartmentId)
                 ?? throw new Exception("The apartment was not found.");
             var totalPrice = (bookingDto.EndDate - bookingDto.StartDate).Days * apartment.Price;
@@ -38,7 +29,7 @@ namespace BookingSystem.Application.Services
                 StartDate = bookingDto.StartDate,
                 EndDate = bookingDto.EndDate,
                 TotalPrice = totalPrice,
-            });
+            }) ?? throw new Exception("The apartment is not available for the selected dates.");
 
             var result = booking.Adapt<BookingDTO>();
             result.ApartmentName = apartment.Name;
@@ -56,11 +47,6 @@ namespace BookingSystem.Application.Services
                     return dto;
                 });
             return new PagedResult<BookingDTO>(dtos, totalCount, page, pageSize);
-        }
-
-        public async Task<bool> IsBookingAvailable(Guid apartmentId, DateTime startDate, DateTime endDate)
-        {
-            return await _bookingRepository.IsBookingAvailable(apartmentId, startDate, endDate);
         }
     }
 }

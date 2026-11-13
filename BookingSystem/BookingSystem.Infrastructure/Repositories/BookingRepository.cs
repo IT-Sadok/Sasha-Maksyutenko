@@ -10,11 +10,25 @@ namespace BookingSystem.Infrastructure.Repositories
     {
         private readonly AppDbContext _context;
         public BookingRepository(AppDbContext context) => _context = context;
-        public async Task<Booking> CreateBooking(Booking booking)
+        public async Task<Booking?> CreateBooking(Booking booking)
         {
+            await using var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
+
+            var isAvailable = !await _context.Bookings.AnyAsync(b =>
+                b.ApartmentId == booking.ApartmentId &&
+                b.StartDate < booking.EndDate &&
+                b.EndDate > booking.StartDate);
+
+            if (!isAvailable)
+            {
+                await transaction.RollbackAsync();
+                return null;
+            }
+
             booking.Id = Guid.NewGuid();
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             return booking;
         }
 
@@ -29,11 +43,6 @@ namespace BookingSystem.Infrastructure.Repositories
                 .Take(pageSize)
                 .ToListAsync();
             return (items, totalCount);
-        }
-
-        public async Task<bool> IsBookingAvailable(Guid apartmentId, DateTime startDate, DateTime endDate)
-        {
-            return !await _context.Bookings.AnyAsync(b =>b.ApartmentId == apartmentId && b.StartDate < endDate && b.EndDate > startDate);
         }
     }
 }

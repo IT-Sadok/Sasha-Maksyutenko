@@ -40,7 +40,6 @@ namespace BookingSystem.Tests
                 StartDate = new DateTime(2026,12,1,0,0,0,DateTimeKind.Utc),
                 EndDate = new DateTime(2026,12,5,0,0,0,DateTimeKind.Utc)
             };
-            _bookingRepositoryMock.Setup(x=>x.IsBookingAvailable(apartmentId,dto.StartDate, dto.EndDate)).ReturnsAsync(true);
             _apartmentRepositoryMock.Setup(x=>x.GetApartmentById(apartmentId)).ReturnsAsync(apartment);
             _bookingRepositoryMock.Setup(x => x.CreateBooking(It.IsAny<Booking>())).ReturnsAsync((Booking booking) => { booking.Id=Guid.NewGuid(); return booking; });
             //Act
