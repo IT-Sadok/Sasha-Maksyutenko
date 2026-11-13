@@ -2,7 +2,6 @@
 using BookingSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BookingSystem.API.Controllers
 {
@@ -11,50 +10,28 @@ namespace BookingSystem.API.Controllers
     public class BookingsController : ControllerBase
     {
         private readonly IBookingService _bookingService;
-        public BookingsController(IBookingService bookingService)
+        private readonly IUserContext _userContext;
+
+        public BookingsController(IBookingService bookingService, IUserContext userContext)
         {
             _bookingService = bookingService;
+            _userContext = userContext;
         }
 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateBooking([FromBody] CreateBookingDTO bookingDTO)
         {
-            try
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (string.IsNullOrEmpty(userId))
-                {
-                    return Unauthorized();
-                }
-
-                var result = await _bookingService.CreateBookingAsync(bookingDTO, userId);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"{ex.Message}, Booking creation failed");
-            }
+            var result = await _bookingService.CreateBookingAsync(bookingDTO, _userContext.UserId);
+            return Ok(result);
         }
+
         [HttpGet("my")]
         [Authorize]
-        public async Task<IActionResult> GetMyBookings()
+        public async Task<IActionResult> GetMyBookings([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            try
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (string.IsNullOrEmpty(userId))
-                {
-                    return Unauthorized();
-                }
-
-                var result = await _bookingService.GetBookingsByUserIdAsync(userId);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"{ex.Message}, Failed to retrieve bookings");
-            }
+            var result = await _bookingService.GetBookingsByUserIdAsync(_userContext.UserId, page, pageSize);
+            return Ok(result);
         }
     }
 }

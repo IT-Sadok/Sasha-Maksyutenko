@@ -2,6 +2,7 @@ using BookingSystem.Application.Interfaces;
 using BookingSystem.Application.Validators;
 using BookingSystem.Infrastructure.Data;
 using BookingSystem.Infrastructure.Repositories;
+using BookingSystem.Application.Services;
 using BookingSystem.Infrastructure.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,8 +31,10 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
             System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
-        ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"]
     };
 });
 builder.Services.AddSwaggerGen(options =>
@@ -51,6 +54,8 @@ builder.Services.AddSwaggerGen(options =>
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
 });
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 builder.Services.AddScoped<IApartmentService, ApartmentService>();
 builder.Services.AddScoped<IBookingService, BookingService>();

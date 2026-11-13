@@ -11,6 +11,11 @@ namespace BookingSystem.Infrastructure.Data
         {
 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        }
         public DbSet<Apartment> Apartments { get; set; }
         public DbSet<Booking> Bookings { get; set; }
     }

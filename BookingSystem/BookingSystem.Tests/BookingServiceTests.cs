@@ -2,7 +2,7 @@
 using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Domain.Entities;
-using BookingSystem.Infrastructure.Services;
+using BookingSystem.Application.Services;
 using Moq;
 using Shouldly;
 
@@ -40,7 +40,6 @@ namespace BookingSystem.Tests
                 StartDate = new DateTime(2026,12,1,0,0,0,DateTimeKind.Utc),
                 EndDate = new DateTime(2026,12,5,0,0,0,DateTimeKind.Utc)
             };
-            _bookingRepositoryMock.Setup(x=>x.IsBookingAvailable(apartmentId,dto.StartDate, dto.EndDate)).ReturnsAsync(true);
             _apartmentRepositoryMock.Setup(x=>x.GetApartmentById(apartmentId)).ReturnsAsync(apartment);
             _bookingRepositoryMock.Setup(x => x.CreateBooking(It.IsAny<Booking>())).ReturnsAsync((Booking booking) => { booking.Id=Guid.NewGuid(); return booking; });
             //Act
@@ -70,13 +69,13 @@ namespace BookingSystem.Tests
                     Apartment=new Apartment{Name="Test Apartment"}
                 },
             };
-            _bookingRepositoryMock.Setup(x => x.GetBookingsByUserId(userId)).ReturnsAsync(bookings);
+            _bookingRepositoryMock.Setup(x => x.GetBookingsByUserId(userId, 1, 10)).ReturnsAsync((bookings.AsEnumerable(), 1));
             //Act
-            var result = await _bookingService.GetBookingsByUserIdAsync(userId);
+            var result = await _bookingService.GetBookingsByUserIdAsync(userId,1,10);
             //Assert
             result.ShouldNotBeNull();
-            result.Count().ShouldBe(1);
-            result.First().ApartmentName.ShouldBe("Test Apartment");
+            result.Items.Count().ShouldBe(1);
+            result.Items.First().ApartmentName.ShouldBe("Test Apartment");
         }
     }
 }

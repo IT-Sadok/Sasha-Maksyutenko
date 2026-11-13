@@ -1,9 +1,7 @@
 ﻿using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BookingSystem.API.Controllers
 {
@@ -12,24 +10,26 @@ namespace BookingSystem.API.Controllers
     public class ApartmentsController : ControllerBase
     {
         private readonly IApartmentService _apartmentService;
-        public ApartmentsController(IApartmentService apartmentService)
+        private readonly IUserContext _userContext;
+        public ApartmentsController(IApartmentService apartmentService, IUserContext userContext)
         {
             _apartmentService = apartmentService;
+            _userContext = userContext;
         }
 
         [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> CreateApartment([FromBody] ApartmentDto apartmentDto)
+        [Authorize(Roles = "Host")]
+        public async Task<IActionResult> CreateApartment([FromBody] CreateApartmentRequest createApartmentRequest)
         {
-            var hostId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = await _apartmentService.CreateApartmentAsync(apartmentDto, hostId);
+            var hostId = _userContext.UserId;
+            var result = await _apartmentService.CreateApartmentAsync(createApartmentRequest, hostId);
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetApartments()
+        public async Task<IActionResult> GetApartments([FromQuery] int page=1, [FromQuery] int pageSize=10)
         {
-            var apartments = await _apartmentService.ListApartmentsAsync();
+            var apartments = await _apartmentService.ListApartmentsAsync(page, pageSize);
             return Ok(apartments);
         }
 
@@ -45,9 +45,9 @@ namespace BookingSystem.API.Controllers
         }
 
         [HttpGet("available")]
-        public async Task<IActionResult> GetAvailableApartments([FromQuery] DateTime start, [FromQuery] DateTime end)
+        public async Task<IActionResult> GetAvailableApartments([FromQuery] DateTime start, [FromQuery] DateTime end, [FromQuery] int page=1, [FromQuery] int pageSize=10)
         {
-            var apartments = await _apartmentService.GetAvailableApartmentsAsync(start, end);
+            var apartments = await _apartmentService.GetAvailableApartmentsAsync(start, end, page, pageSize);
             return Ok(apartments);
         }
     }
