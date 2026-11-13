@@ -21,6 +21,8 @@ namespace BookingSystem.Application.Services
         {
             var apartment = await _apartmentRepository.GetApartmentById(bookingDto.ApartmentId)
                 ?? throw new Exception("The apartment was not found.");
+            if (!apartment.IsAvailable)
+                throw new Exception("The apartment is not available.");
             var totalPrice = (bookingDto.EndDate - bookingDto.StartDate).Days * apartment.Price;
             var booking = await _bookingRepository.CreateBooking(new Booking
             {
