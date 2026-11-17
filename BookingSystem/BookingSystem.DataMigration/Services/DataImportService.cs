@@ -97,13 +97,17 @@ namespace BookingSystem.DataMigration.Services
                 }
                 if ((userCount + skippedUsers) % batchSize == 0)
                 {
+                    await using var transaction = await _context.Database.BeginTransactionAsync();
                     await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
                     Console.WriteLine($"Processed {userCount + skippedUsers} users...");
                 }
             }
 
             // Save remaining
+            await using var finalTransaction = await _context.Database.BeginTransactionAsync();
             await _context.SaveChangesAsync();
+            await finalTransaction.CommitAsync();
 
             Console.WriteLine($"Import complete!");
             Console.WriteLine($"Users created: {userCount}, skipped: {skippedUsers}");
