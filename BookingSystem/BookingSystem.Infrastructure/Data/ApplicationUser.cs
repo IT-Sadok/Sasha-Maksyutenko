@@ -8,5 +8,7 @@ namespace BookingSystem.Infrastructure.Data
     {
         public string Name { get; set; }
         public Role Role { get; set; }
+        public string? ExternalId { get; set; }
+
     }
 }

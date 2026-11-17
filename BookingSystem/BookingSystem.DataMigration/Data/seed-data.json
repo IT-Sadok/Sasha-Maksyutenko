@@ -1,0 +1,46 @@
+﻿[
+  {
+    "id": "user-001",
+    "name": "John Host",
+    "email": "john@test.com",
+    "password": "Password123!",
+    "role": "Host",
+    "apartments": [
+      {
+        "id": "apt-001",
+        "name": "Cozy Studio",
+        "price": 50.00,
+        "numberOfRooms": 1
+      },
+      {
+        "id": "apt-002",
+        "name": "Sea View Apartment",
+        "price": 120.00,
+        "numberOfRooms": 3
+      }
+    ]
+  },
+  {
+    "id": "user-002",
+    "name": "Jane Host",
+    "email": "jane@test.com",
+    "password": "Password123!",
+    "role": "Host",
+    "apartments": [
+      {
+        "id": "apt-003",
+        "name": "Mountain Cabin",
+        "price": 80.00,
+        "numberOfRooms": 2
+      }
+    ]
+  },
+  {
+    "id": "user-003",
+    "name": "Bob Client",
+    "email": "bob@test.com",
+    "password": "Password123!",
+    "role": "Client",
+    "apartments": []
+  }
+]

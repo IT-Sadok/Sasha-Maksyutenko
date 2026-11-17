@@ -10,6 +10,7 @@ namespace BookingSystem.Domain.Entities
         public bool IsAvailable { get; set; }
         public decimal Price { get; set; }
         public int NumberOfRooms { get; set; }
+        public string? ExternalId { get; set; }
 
     }
 }
