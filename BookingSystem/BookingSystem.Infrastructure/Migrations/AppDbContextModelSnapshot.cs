@@ -28,6 +28,9 @@ namespace BookingSystem.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ExternalId")
+                        .HasColumnType("text");
+
                     b.Property<string>("HostId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -74,6 +77,8 @@ namespace BookingSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApartmentId");
+
                     b.ToTable("Bookings");
                 });
 
@@ -95,6 +100,9 @@ namespace BookingSystem.Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("ExternalId")
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -278,6 +286,17 @@ namespace BookingSystem.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BookingSystem.Domain.Entities.Booking", b =>
+                {
+                    b.HasOne("BookingSystem.Domain.Entities.Apartment", "Apartment")
+                        .WithMany()
+                        .HasForeignKey("ApartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Apartment");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
