@@ -1,0 +1,1 @@
+SELECT "Apartments"."HostId", SUM("Bookings"."TotalPrice") FROM "Bookings" JOIN "Apartments" ON "Apartments"."Id" = "Bookings"."ApartmentId" GROUP BY "Apartments"."HostId" HAVING SUM("Bookings"."TotalPrice") > @Threshold;

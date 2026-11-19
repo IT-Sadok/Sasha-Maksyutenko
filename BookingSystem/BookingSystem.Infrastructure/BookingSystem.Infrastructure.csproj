@@ -16,6 +16,10 @@
     <ProjectReference Include="..\BookingSystem.Application\BookingSystem.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SqlScripts\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
