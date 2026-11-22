@@ -38,5 +38,24 @@ namespace BookingSystem.Infrastructure.Repositories
                 .Where(a => !_context.Bookings.Any(b => b.ApartmentId == a.Id && b.StartDate < endDate && b.EndDate > startDate))
                 .ToListAsync();
         }
+
+        public async Task<Apartment> UpsertApartmentAsync(Apartment apartment)
+        {
+            var existing = await _context.Apartments.FindAsync(apartment.Id);
+            if(existing==null)
+            {
+                _context.Apartments.Add(apartment);
+            }
+            else
+            {
+                existing.Name = apartment.Name;
+                existing.Price = apartment.Price;
+                existing.NumberOfRooms = apartment.NumberOfRooms;
+                existing.IsAvailable = apartment.IsAvailable;
+                existing.Metadata = apartment.Metadata;
+            }
+            await _context.SaveChangesAsync();
+            return apartment;
+        }
     }
 }
