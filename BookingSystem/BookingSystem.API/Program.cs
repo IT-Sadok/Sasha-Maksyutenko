@@ -1,4 +1,5 @@
 using BookingSystem.Application.Interfaces;
+using BookingSystem.Application.Options;
 using BookingSystem.Application.Validators;
 using BookingSystem.Infrastructure.Data;
 using BookingSystem.Infrastructure.Repositories;
@@ -51,6 +52,9 @@ builder.Services.AddSwaggerGen(options =>
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
 });
+builder.Services.Configure<DatabaseOptions>(options =>
+    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")!);
+builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 builder.Services.AddScoped<IApartmentService, ApartmentService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
