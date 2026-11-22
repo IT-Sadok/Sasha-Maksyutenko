@@ -55,6 +55,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.Configure<DatabaseOptions>(options =>
     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 builder.Services.AddScoped<IApartmentService, ApartmentService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
