@@ -1,7 +1,7 @@
 using System.Reflection;
 using BookingSystem.Application.DTOs;
 using BookingSystem.Application.Interfaces;
-using BookingSystem.Application.Options;
+using BookingSystem.Infrastructure.Options;
 using Dapper;
 using Microsoft.Extensions.Options;
 using Npgsql;

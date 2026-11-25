@@ -1,8 +1,11 @@
 ﻿using BookingSystem.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookingSystem.API.Controllers
 {
+    [Authorize]
     [Route("api/statistics")]
     [ApiController]
     public class StatisticsController : ControllerBase
@@ -28,7 +31,7 @@ namespace BookingSystem.API.Controllers
         }
 
         [HttpGet("top-hosts")]
-        public async Task<IActionResult> GetTopHostsByRevenueAsync([FromQuery] decimal threshold)
+        public async Task<IActionResult> GetTopHostsByRevenueAsync([FromQuery, Range(0, double.MaxValue)] decimal threshold)
         {
             var result = await _statisticsService.GetTopHostsByRevenueAsync(threshold);
             return Ok(result);

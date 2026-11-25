@@ -1,4 +1,4 @@
-namespace BookingSystem.Application.Options
+namespace BookingSystem.Infrastructure.Options
 {
     public class DatabaseOptions
     {

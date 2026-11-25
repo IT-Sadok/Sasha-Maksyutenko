@@ -39,7 +39,7 @@ namespace BookingSystem.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Apartment> UpsertApartmentAsync(Apartment apartment)
+        public async Task<Apartment> UpsertApartmentAsync(Apartment apartment, string hostId)
         {
             var existing = await _context.Apartments.FindAsync(apartment.Id);
             if(existing==null)
@@ -48,6 +48,11 @@ namespace BookingSystem.Infrastructure.Repositories
             }
             else
             {
+                if (existing.HostId != hostId)
+                {
+                    throw new UnauthorizedAccessException("The host does not own this apartment.");
+                }
+
                 existing.Name = apartment.Name;
                 existing.Price = apartment.Price;
                 existing.NumberOfRooms = apartment.NumberOfRooms;

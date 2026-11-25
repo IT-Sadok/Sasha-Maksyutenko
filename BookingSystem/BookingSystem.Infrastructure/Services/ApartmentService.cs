@@ -88,7 +88,7 @@ namespace BookingSystem.Infrastructure.Services
                 Metadata = apartmentDto.Metadata,
                 HostId = hostId
             };
-            var result = await _apartmentRepository.UpsertApartmentAsync(apartment);
+            var result = await _apartmentRepository.UpsertApartmentAsync(apartment, hostId);
             return new ApartmentDto
             {
                 Id = result.Id,
