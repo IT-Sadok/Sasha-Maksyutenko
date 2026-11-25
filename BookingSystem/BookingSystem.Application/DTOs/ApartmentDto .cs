@@ -5,10 +5,11 @@ namespace BookingSystem.Application.DTOs
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
-        public string HostId { get; set; }
+        public string? HostId { get; set; }
         public bool IsAvailable { get; set; }
         public decimal Price { get; set; }
         public int NumberOfRooms { get; set; }
+        public string? Metadata { get; set; }
 
     }
 }

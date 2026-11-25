@@ -50,5 +50,14 @@ namespace BookingSystem.API.Controllers
             var apartments = await _apartmentService.GetAvailableApartmentsAsync(start, end);
             return Ok(apartments);
         }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> UpsertApartment([FromBody] ApartmentDto apartmentDto)
+        {
+            var hostId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _apartmentService.UpsertApartmentAsync(apartmentDto, hostId!);
+            return Ok(result);
+        }
     }
 }

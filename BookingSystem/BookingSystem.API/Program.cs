@@ -1,6 +1,8 @@
 using BookingSystem.Application.Interfaces;
 using BookingSystem.Application.Validators;
+using BookingSystem.API.Middleware;
 using BookingSystem.Infrastructure.Data;
+using BookingSystem.Infrastructure.Options;
 using BookingSystem.Infrastructure.Repositories;
 using BookingSystem.Infrastructure.Services;
 using FluentValidation;
@@ -51,12 +53,18 @@ builder.Services.AddSwaggerGen(options =>
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
 });
+builder.Services.Configure<DatabaseOptions>(options =>
+    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")!);
+builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 builder.Services.AddScoped<IApartmentService, ApartmentService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

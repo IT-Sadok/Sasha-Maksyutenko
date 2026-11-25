@@ -75,5 +75,30 @@ namespace BookingSystem.Infrastructure.Services
                 HostId = apartment.HostId,
             });
         }
+
+        public async Task<ApartmentDto> UpsertApartmentAsync(ApartmentDto apartmentDto, string hostId)
+        {
+            var apartment = new Apartment
+            {
+                Id = apartmentDto.Id,
+                Name = apartmentDto.Name,
+                Price = apartmentDto.Price,
+                NumberOfRooms = apartmentDto.NumberOfRooms,
+                IsAvailable = apartmentDto.IsAvailable,
+                Metadata = apartmentDto.Metadata,
+                HostId = hostId
+            };
+            var result = await _apartmentRepository.UpsertApartmentAsync(apartment, hostId);
+            return new ApartmentDto
+            {
+                Id = result.Id,
+                Name = result.Name,
+                Price = result.Price,
+                NumberOfRooms = result.NumberOfRooms,
+                IsAvailable = result.IsAvailable,
+                Metadata = result.Metadata,
+                HostId = result.HostId
+            };
+        }
     }
 }

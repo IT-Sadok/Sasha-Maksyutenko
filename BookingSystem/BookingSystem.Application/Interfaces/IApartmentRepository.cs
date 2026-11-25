@@ -8,5 +8,6 @@ namespace BookingSystem.Application.Interfaces
         Task<IEnumerable<Apartment>> GetAll();
         Task<IEnumerable<Apartment>> GetAvailableApartments(DateTime startDate, DateTime endDate);
         Task<Apartment> AddApartment(Apartment apartment);
+        Task<Apartment> UpsertApartmentAsync(Apartment apartment, string hostId);
     }
 }
